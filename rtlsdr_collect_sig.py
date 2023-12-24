@@ -16,7 +16,7 @@ num_loops = 5
 plot_flag = 1
 
 # Pause Time (sec)
-pause_time = 60
+pause_time = 1
 
 # Configure Device
 sdr.sample_rate = 2.4e6
@@ -36,11 +36,7 @@ for i in range(num_loops):
    month = now.strftime("%m")
    day = now.strftime("%d")
    time_now = now.strftime("%H:%M:%S")
-   date_time = now.strftime("%Y%m%d__%H%M%S__")
-   print("date_time_string = ",date_time)	
-
-   # Print Status
-   print(i)
+   date_time = now.strftime("%Y%m%d__%H%M%S__")	
 
    # String iteration
    #loop = str(i)
@@ -48,6 +44,9 @@ for i in range(num_loops):
 
    # Create a complete filename
    file_path = file_path_dir + file_prefix + date_time + loop
+
+   # Print Status
+   print("Collected " + loop + " of " + str(num_loops) + " " + file_path)
    
    # Collect Data
    samples = sdr.read_samples(4*256*1024)

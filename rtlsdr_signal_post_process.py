@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Set a Plot Flag
-plot_flag = 1
+plot_sample_flag = 1
+plot_avg_flag = 1
 
 # Get the background file to read
 file_path_dir = "/home/airscanner100/Data/2023_0000_0000"
@@ -29,6 +30,7 @@ freq_array = np.array(zeros(psd_nfft))
 
 # Set up a path and filename for the average background
 plot_out_avg = os.path.join(file_path_dir, "avgbkrgnd__" + str(direction) + "__" + str(incline) + '.png')
+save_out_avg = os.path.join(file_path_dir, "avgbkrgnd__" + str(direction) + "__" + str(incline))
 
 # Process Data in a Directory
 for file_name in os.listdir(file_path_dir):
@@ -43,7 +45,8 @@ for file_name in os.listdir(file_path_dir):
         # Extract the file name and extension for saving plots
         file_name_prefix = split_tup[0]
         file_name_ext = split_tup[1]
-        plot_out = os.path.join(file_path_dir, file_name_prefix) + "__" + str(direction) + "__" + str(incline) + '.png'
+        plot_out = \
+            os.path.join(file_path_dir, file_name_prefix) + "__" + str(direction) + "__" + str(incline) + '.png'
 
         # Print Status
         print('Processing File #' + str(count).rjust(3, '0') + ":  " + file_in)
@@ -51,11 +54,15 @@ for file_name in os.listdir(file_path_dir):
         # Read the file
         data_in = np.load(file_in)
 
-        # Calculate the PSD of the data collected
-        psd_samp, freq_samp = psd(data_in, NFFT=psd_nfft, Fs=sample_rate / 1e6, Fc=center_freq / 1e6, return_line=None)
+        # Calculate the PSD of the data collected (Generates a Plot)
+        psd_samp, freq_samp = \
+            psd(data_in, NFFT=psd_nfft, Fs=sample_rate / 1e6, Fc=center_freq / 1e6, return_line=None)
+
+        # Close the figure
+        plt.close()
 
         # Plot the PSD of the captured file
-        if plot_flag == 1:
+        if plot_sample_flag == 1:
             # Turn on Interactive
             plt.ion()
 
@@ -73,7 +80,7 @@ for file_name in os.listdir(file_path_dir):
             plt.show()
 
             # Pause
-            pause(4)
+            pause(2)
 
             # Close the figure
             plt.close()
@@ -98,8 +105,12 @@ for file_name in os.listdir(file_path_dir):
 psd_array_avg = psd_array / (count - 1)
 freq_array_avg = freq_array / (count - 1)
 
+# Save averaged data to file
+np.savez(save_out_avg, psd_array_avg_var=psd_array_avg, freq_array_avg_var=freq_array_avg)
+
 # Plot the average of the background data
-if plot_flag == 1:
+if plot_avg_flag == 1:
+
     # Turn on Interactive
     plt.ion()
 
@@ -108,7 +119,7 @@ if plot_flag == 1:
     plt.plot(freq_array_avg, psd_array_avg)
     xlabel('Frequency (MHz)')
     ylabel('Sample Relative Power')
-    plt.title("AvgBkgrnd__" + str(direction) + "__" + str(incline))
+    plt.title("AvgBkGrnd__" + str(direction) + "__" + str(incline))
 
     # Save the figure
     plt.savefig(plot_out_avg)

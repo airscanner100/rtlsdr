@@ -4,12 +4,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Set a Plot Flag
-plot_sample_flag = 1
+plot_sample_flag = 0
 plot_avg_flag = 1
 
-# Get the background file to read
-file_path_dir = "/home/airscanner100/Data/2023_0000_0000"
-# file_path_dir = "/home/airscanner100/Data/2023_1221_BKGRND"
+# Process the directory with the data
+# file_path_dir = "/home/airscanner100/Data/2023_0000_0000"
+file_path_dir = "/home/airscanner100/Data/2023_1221_BKGRND"
 # file_path_dir = "/home/airscanner100/Data/2023_1220_2317"
 # file_path_dir = "/home/airscanner100/Data/2023_1221_1017"
 
@@ -101,6 +101,7 @@ for file_name in os.listdir(file_path_dir):
         continue
 
 # Generate an average PSD
+print('Generating an Averaged Background Result')
 psd_array_avg = psd_array / (count - 1)
 freq_array_avg = freq_array / (count - 1)
 
@@ -118,13 +119,16 @@ if plot_avg_flag == 1:
     plt.plot(freq_array_avg, psd_array_avg)
     xlabel('Frequency (MHz)')
     ylabel('Sample Relative Power')
-    plt.title("AvgBkGrnd__" + str(direction) + "__" + str(incline))
+    plt.title("AvgBkgrnd_PSD__" + str(direction) + "__" + str(incline))
 
     # Save the figure
     plt.savefig(plot_out_avg)
 
     # Show the average plot
     plt.show()
+
+    # Pause
+    pause(1)
 
     # Close the average plot
     plt.close()

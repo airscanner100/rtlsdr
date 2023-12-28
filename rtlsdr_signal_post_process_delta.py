@@ -5,7 +5,7 @@ import numpy as np
 
 # Set a Plot Flag
 plot_sample_flag = 1
-plot_avg_flag = 1
+plot_delta_flag = 1
 
 # Get the background file to read
 data_path_dir = "/home/airscanner100/Data/2023_0000_0000"
@@ -24,13 +24,14 @@ direction = 270         # Compass direction 0=North, 90=East, 180=South, 270=Wes
 incline = 45            # Angle of inclination of dish from earth horizon
 psd_nfft = 2048         # Length of PSD vectors (freq and magnitude)
 
-# Initialize arrays for averaging
-psd_array = np.array(zeros(psd_nfft))
-freq_array = np.array(zeros(psd_nfft))
+# Generate the filename for the averaged background data
+load_out_avg = os.path.join(bkgnd_path_dir, "avgbkrgnd__psd__" + str(direction) + "__" + str(incline) + '.npz')
 
-# Set up a path and filename for the average background
-plot_out_avg = os.path.join(bkgnd_path_dir, "avgbkrgnd__" + str(direction) + "__" + str(incline) + '.png')
-save_out_avg = os.path.join(bkgnd_path_dir, "avgbkrgnd__" + str(direction) + "__" + str(incline))
+# Load averaged data
+avg_in = np.load(load_out_avg)
+print(avg_in.files)
+psd_array_avg = avg_in['psd_array_avg_vector']
+freq_array_avg = avg_in['freq_array_avg_vector']
 
 # Process Data in a Directory
 for file_name in os.listdir(data_path_dir):
@@ -63,6 +64,7 @@ for file_name in os.listdir(data_path_dir):
 
         # Plot the PSD of the captured file
         if plot_sample_flag == 1:
+
             # Turn on Interactive
             plt.ion()
 
@@ -85,9 +87,32 @@ for file_name in os.listdir(data_path_dir):
             # Close the figure
             plt.close()
 
-        # Add to the PSD array
-        psd_array = psd_array + psd_samp
-        freq_array = freq_array + freq_samp
+            # Plot the data with background removed
+            # Set up a path and filename for the calibrated plot
+            plot_out_delta = os.path.join(data_path_dir, file_name_prefix +
+                                          str(direction) + "__" + str(incline) + '__delta' + '.png')
+
+            # Turn on Interactive
+            plt.ion()
+
+            # Generate a figure and plot the data
+            plt.figure()
+            plt.plot(freq_samp, psd_samp - psd_array_avg)
+            xlabel('Frequency (MHz)')
+            ylabel('Sample Relative Power (Background Subtracted)')
+            plt.title(file_name_prefix + "__delta__" + str(direction) + "__" + str(incline))
+
+            # Save the figure
+            plt.savefig(plot_out_delta)
+
+            # Show the delta plot
+            plt.show()
+
+            # Pause
+            pause(2)
+
+            # Close the figure
+            plt.close()
 
         # Update counter
         count = count + 1
@@ -100,35 +125,6 @@ for file_name in os.listdir(data_path_dir):
 
     else:
         continue
-
-# Generate an average PSD
-psd_array_avg = psd_array / (count - 1)
-freq_array_avg = freq_array / (count - 1)
-
-# Save averaged data to file
-np.savez(save_out_avg, psd_array_avg_vector=psd_array_avg, freq_array_avg_vector=freq_array_avg)
-
-# Plot the average of the background data
-if plot_avg_flag == 1:
-
-    # Turn on Interactive
-    plt.ion()
-
-    # Generate a figure and plot the data
-    plt.figure()
-    plt.plot(freq_array_avg, psd_array_avg)
-    xlabel('Frequency (MHz)')
-    ylabel('Sample Relative Power')
-    plt.title("AvgBkGrnd__" + str(direction) + "__" + str(incline))
-
-    # Save the figure
-    plt.savefig(plot_out_avg)
-
-    # Show the average plot
-    plt.show()
-
-    # Close the average plot
-    plt.close()
 
 # End Program 
 print('End Program')

@@ -8,8 +8,10 @@ from datetime import datetime
 
 sdr = RtlSdr()
 
-# Configure NFFT
-nfft_len = 2048
+# Initiate Variables
+direction = 270         # Compass direction 0=North, 90=East, 180=South, 270=West
+incline = 45            # Angle of inclination of dish from earth horizon
+psd_nfft = 2048         # Length of PSD vectors (freq and magnitude)
 
 # Set Number of Loops
 num_group_loop = 5
@@ -64,7 +66,7 @@ for i in range(num_loops):
         del file_path
 
         # Generate the PSD of the data collected
-        psd_samp, freq_samp = psd(samples, NFFT=nfft_len, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
+        psd_samp, freq_samp = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
 
         plt.close()
 

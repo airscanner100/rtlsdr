@@ -21,7 +21,7 @@ num_loops = 5
 plot_flag = 1
 
 # Pause Time (sec)
-pause_group_time = 1
+pause_group_time = 5
 pause_loop_time = 60
 
 # Configure Device
@@ -32,6 +32,8 @@ sdr.gain = 'auto'
 # Prepare a Filename
 file_prefix = 'data_'
 file_path_dir = "C:\\Scan_Files\\data\\"
+
+
 
 # Collect Data
 for i in range(num_loops):
@@ -51,7 +53,7 @@ for i in range(num_loops):
         loop = str(i).rjust(3, '0')
 
         # Create a complete filename
-        file_path = file_path_dir + file_prefix + date_time + loop
+        file_path = file_path_dir + file_prefix + date_time + loop + '__' + str(direction) + "_" + str(incline)
 
         # Print Status
         print("Collected " + loop + " of " + str(num_loops) + " " + file_path)

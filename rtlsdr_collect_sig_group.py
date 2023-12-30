@@ -18,11 +18,11 @@ num_group_loop = 30
 num_loops = 100
 
 # Set a Plot Flag
-plot_flag = 1
+plot_flag = 0
 
 # Pause Time (sec)
 pause_group_time = 3
-pause_loop_time = 60
+pause_loop_time = 600
 
 # Configure Device
 sdr.sample_rate = 2.4e6

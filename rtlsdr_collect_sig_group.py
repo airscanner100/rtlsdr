@@ -33,10 +33,11 @@ sdr.gain = 'auto'
 file_prefix = 'data_'
 file_path_dir = "C:\\Scan_Files\\data\\"
 
-
-
 # Collect Data
 for i in range(num_loops):
+
+    # String iteration
+    loop = str(i).rjust(3, '0')
 
     for j in range(num_group_loop):
 
@@ -49,23 +50,19 @@ for i in range(num_loops):
         date_time = now.strftime("%Y%m%d__%H%M%S__")
 
         # String iteration
-        # loop = str(i)
-        loop = str(i).rjust(3, '0')
+        group_loop = str(j + 1)
 
         # Create a complete filename
-        file_path = file_path_dir + file_prefix + date_time + loop + '__' + str(direction) + "_" + str(incline)
+        file_path = file_path_dir + file_prefix + date_time + loop + "__" + str(direction) + "_" + str(incline)
 
         # Print Status
-        print("Collected " + loop + " of " + str(num_loops) + " " + file_path)
+        print("Collected Group Loop " + group_loop + " of " + str(num_group_loop) + " " + file_path)
 
         # Collect Data
         samples = sdr.read_samples(4 * 256 * 1024)
 
         # Save the File
         np.save(file_path, samples)
-
-        # Close the File
-        del file_path
 
         # Generate the PSD of the data collected
         psd_samp, freq_samp = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
@@ -74,6 +71,10 @@ for i in range(num_loops):
 
         # Plot Data
         if plot_flag == 1:
+
+            # Turn on interactive
+            plt.ion()
+
             # Plot the PSD of the captured file
             plt.figure(1)
             plt.plot(freq_samp, psd_samp)
@@ -83,10 +84,22 @@ for i in range(num_loops):
             # Show the plot
             plt.show()
 
-        pause(pause_loop_time)
+            # Save the plot
+            # Save command
 
-# Pause Before the Next Loop
-time.sleep(pause_group_time)
+            # Close the plot
+            plt.close()
+
+        pause(pause_group_time)
+
+    # Print update
+    print("Collected Loop " + loop + " of " + str(num_loops))
+
+    # Pause Before the Next Loop
+    pause(pause_loop_time)
+
+    # Close the File
+    del file_path
 
 # Close the SDR
 sdr.close()

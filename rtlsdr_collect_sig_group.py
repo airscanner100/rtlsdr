@@ -14,14 +14,14 @@ incline = 45            # Angle of inclination of dish from earth horizon
 psd_nfft = 2048         # Length of PSD vectors (freq and magnitude)
 
 # Set Number of Loops
-num_group_loop = 5
-num_loops = 5
+num_group_loop = 30
+num_loops = 100
 
 # Set a Plot Flag
 plot_flag = 1
 
 # Pause Time (sec)
-pause_group_time = 5
+pause_group_time = 3
 pause_loop_time = 60
 
 # Configure Device

@@ -15,7 +15,7 @@ psd_nfft = 2048         # Length of PSD vectors (freq and magnitude)
 
 # Set Number of Loops
 num_group_loop = 30
-num_loops = 100
+num_loops = 120
 
 # Set a Plot Flag
 plot_flag = 0

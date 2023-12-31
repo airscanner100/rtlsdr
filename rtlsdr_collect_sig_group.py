@@ -9,9 +9,10 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Initiate Variables
-direction = 270         # Compass direction 0=North, 90=East, 180=South, 270=West
-incline = 45            # Angle of inclination of dish from earth horizon
-psd_nfft = 2048         # Length of PSD vectors (freq and magnitude)
+num_samples = 4 * 256 * 1024  # Number of samples to collect
+direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
+incline = 45                  # Angle of inclination of dish from earth horizon
+psd_nfft = 2048               # Length of PSD vectors (freq and magnitude)
 
 # Set Number of Loops
 num_group_loop = 30
@@ -30,7 +31,6 @@ sdr.center_freq = 1420.4e6
 sdr.gain = 'auto'
 
 # Prepare a Filename
-file_prefix = 'data_'
 file_path_dir = "C:\\Scan_Files\\data\\"
 
 # Collect Data
@@ -50,16 +50,16 @@ for i in range(num_loops):
         date_time = now.strftime("%Y%m%d__%H%M%S__")
 
         # String iteration
-        group_loop = str(j + 1)
+        group_loop = str(j+1).rjust(3, '0')
 
         # Create a complete filename
-        file_path = file_path_dir + file_prefix + date_time + loop + "__" + str(direction) + "_" + str(incline)
+        file_path = file_path_dir + loop + "__" + group_loop + "__" + date_time + str(direction) + "_" + str(incline)
 
         # Print Status
-        print("Collected Group Loop " + group_loop + " of " + str(num_group_loop) + " " + file_path)
+        print("Collected Group File " + str(j+1) + " of " + str(num_group_loop) + " " + file_path)
 
         # Collect Data
-        samples = sdr.read_samples(4 * 256 * 1024)
+        samples = sdr.read_samples(num_samples)
 
         # Save the File
         np.save(file_path, samples)
@@ -93,7 +93,7 @@ for i in range(num_loops):
         pause(pause_group_time)
 
     # Print update
-    print("Collected Loop " + loop + " of " + str(num_loops))
+    print("Collected Loop " + str(i+1) + " of " + str(num_loops))
 
     # Pause Before the Next Loop
     pause(pause_loop_time)

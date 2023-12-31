@@ -8,8 +8,8 @@ plot_sample_flag = 0
 plot_avg_flag = 1
 
 # Process the directory with the data
-# file_path_dir = "/home/airscanner100/Data/2023_0000_0000"
-file_path_dir = "/home/airscanner100/Data/2023_1221_BKGRND"
+#file_path_dir = "/home/airscanner100/Data/2023_0000_0000"
+file_path_dir = "/home/airscanner100/Data/2023_1229_2034/background_1700"
 # file_path_dir = "/home/airscanner100/Data/2023_1220_2317"
 # file_path_dir = "/home/airscanner100/Data/2023_1221_1017"
 

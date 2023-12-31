@@ -9,7 +9,7 @@ plot_delta_flag = 1
 
 # Get the background file to read
 data_path_dir = "/home/airscanner100/Data/2023_0000_0000"
-bkgnd_path_dir = "/home/airscanner100/Data/2023_1221_BKGRND"
+bkgnd_path_dir = "/home/airscanner100/Data/2023_1229_2034/background"
 # file_path_dir = "/home/airscanner100/Data/2023_1220_2317"
 # file_path_dir = "/home/airscanner100/Data/2023_1221_1017"
 

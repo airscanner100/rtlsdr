@@ -11,10 +11,9 @@ sdr.gain = 10
 samples_background = sdr.read_samples(4*256*1024)
 
 # Save Samples To File
-#file_path = "/home/airscanner101/Data/background_4x256x1024"
-file_path = "C:\\Scan_Files\\data\\background_4x256x1024"
-
+file_path = "/home/airscanner101/Data/background_4x256x1024"
 np.save(file_path, samples_background)
+
 
 # Close the file
 del file_path

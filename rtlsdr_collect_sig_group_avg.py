@@ -8,6 +8,7 @@ import numpy as np
 import time
 from datetime import datetime
 
+# Call the Rtlsdr library
 sdr = RtlSdr()
 
 # Initiate Variables
@@ -79,7 +80,7 @@ for i in range(num_loops):
         plt.close()
     
         # Generate the PSD of the data collected
-        psd_samp, freq_samp = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
+        psd_samp, freq_samp, data_line = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
 
         # Close plot for PSD
         plt.close()

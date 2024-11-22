@@ -1,0 +1,2 @@
+sudo rtl_biast -b 1
+

@@ -8,25 +8,24 @@ import numpy as np
 import time
 from datetime import datetime
 
-# Call the Rtlsdr library
 sdr = RtlSdr()
 
 # Initiate Variables
-num_samples = 4 * 256 * 1024  # Number of samples to collect
+num_samples = 8 * 256 * 1024  # Number of samples to collect  1024
 direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
 incline = 45                  # Angle of inclination of dish from earth horizon
-psd_nfft = 2048               # Length of PSD vectors (freq and magnitude)
+psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  2048
 
 # Set Number of Loops
-num_group_loop = 4 #30
-num_loops = 3 #25
+num_group_loop = 100 #100
+num_loops = 100 #90
+
+# Pause Time (sec)
+pause_group_time = 1 #1
+pause_loop_time = 60 #600
 
 # Set a Plot Flag
 plot_flag = 1
-
-# Pause Time (sec)
-pause_group_time = 5 #30
-pause_loop_time = 5 #600
 
 # Configure Device
 sdr.sample_rate = 2.4e6
@@ -41,11 +40,11 @@ date_time_dir = now.strftime("%Y%m%d__%H%M")
 if platform == "linux" or platform == "linux2":
     # linux
     print("OS is Linux ...")
-    file_path_dir = "/home/airscanner100/Data/" + date_time_dir + "/"
+    file_path_dir = "/home/airscanner101/Data/" + date_time_dir + "/"
 elif platform == "darwin":
     # OS X
     print("OS is Mac ...")
-    file_path_dir = "/home/airscanner100/Data/" + date_time_dir + "/"
+    file_path_dir = "/home/airscanner101/Data/" + date_time_dir + "/"
 elif platform == "win32":
     # Windows
     print("OS is Windows ...")
@@ -80,7 +79,7 @@ for i in range(num_loops):
         plt.close()
     
         # Generate the PSD of the data collected
-        psd_samp, freq_samp, data_line = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
+        psd_samp, freq_samp = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
 
         # Close plot for PSD
         plt.close()
@@ -135,7 +134,7 @@ for i in range(num_loops):
         plt.plot(freq_array_avg, psd_array_avg)
         xlabel('Frequency (MHz)')
         ylabel('Samp Relative power (dB)')
-        plt.title("Uncorr Avg Bkgrnd PSD " + str(count-1) + " Traces: Loop " + str(i+1))
+        plt.title(str(date_time) + "  Uncr Avg PSD " + str(count-1) + " Traces: Loop " + str(i+1))
 
         # Save the plot
         plt.savefig(file_path)

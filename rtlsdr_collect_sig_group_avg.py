@@ -110,7 +110,7 @@ for i in range(num_loops):
     group_loop = str(j+1).rjust(3, '0')
 
     # Create a Complete Filename
-    file_path = file_path_dir + loop + "__avg__" + date_time + str(direction) + "_" + str(incline)
+    file_path = file_path_dir + loop + "__avg__" + date_time + f"{direction:03d}" + "_" + f"{incline:03d}"
 
     # Generate an Average PSD
     print('Generating an Averaged Signal Result')

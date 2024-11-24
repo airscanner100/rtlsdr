@@ -11,18 +11,18 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Initiate Variables
-num_samples = 8 * 256 * 1024  # Number of samples to collect  1024
+num_samples = 8 * 256 * 1024  # Number of samples to collect  8*256*1024
 direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
-incline = 45                  # Angle of inclination of dish from earth horizon
-psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  2048
+incline = 90                  # Angle of inclination of dish from earth horizon
+psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  4096
 
 # Set Number of Loops
-num_group_loop = 100 #100
-num_loops = 100 #90
+num_group_loop = 10 #100
+num_loops = 3 #90
 
 # Pause Time (sec)
 pause_group_time = 1 #1
-pause_loop_time = 60 #600
+pause_loop_time = 6 #600
 
 # Set a Plot Flag
 plot_flag = 1
@@ -50,7 +50,7 @@ elif platform == "win32":
     print("OS is Windows ...")
     file_path_dir = "C:\\Scan_Files\\data\\" + date_time_dir + "\\"
 
-# Create directory if necessary
+# Create Directory if Necessary
 if not os.path.exists(file_path_dir):
     os.mkdir(file_path_dir)
 
@@ -60,41 +60,42 @@ for i in range(num_loops):
     # Initiate Variables
     count = 1    # Counter
 
-    # String iteration
+    # String Iteration
     loop = str(i).rjust(3, '0')
 
-    # Initialize arrays for averaging
+    # Initialize Arrays for Averaging
     psd_array = np.array(zeros(psd_nfft))
     freq_array = np.array(zeros(psd_nfft))
 
     for j in range(num_group_loop):
       
         # Print Status
-        print("Collected Group File " + str(j+1) + " of " + str(num_group_loop))
+        print("Collected Group " + str(i+1) + " of " + str(num_loops) + 
+            ", File " + str(j+1) + " of " + str(num_group_loop))
 
         # Collect Data
         samples = sdr.read_samples(num_samples)
 
-        # Close plot for PSD
+        # Close Plot for PSD
         plt.close()
     
-        # Generate the PSD of the data collected
+        # Generate the PSD of the Data Collected
         psd_samp, freq_samp = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
 
-        # Close plot for PSD
+        # Close Plot for PSD
         plt.close()
 
-	# Add to the PSD array
+	    # Add to the PSD array
         psd_array = psd_array + psd_samp
         freq_array = freq_array + freq_samp
         
-        # Update counter
+        # Update Counter
         count = count + 1
 
         # Pause
         pause(pause_group_time)
 
-    # Print update
+    # Print Update
     print("Collected Loop " + str(i+1) + " of " + str(num_loops))
 
     # Prepare a Time Date String for Filename
@@ -105,13 +106,13 @@ for i in range(num_loops):
     time_now = now.strftime("%H:%M:%S")
     date_time = now.strftime("%Y%m%d__%H%M%S__")
 
-    # String iteration
+    # String Iteration
     group_loop = str(j+1).rjust(3, '0')
 
-    # Create a complete filename
+    # Create a Complete Filename
     file_path = file_path_dir + loop + "__avg__" + date_time + str(direction) + "_" + str(incline)
 
-    # Generate an average PSD
+    # Generate an Average PSD
     print('Generating an Averaged Signal Result')
     print('------------------------------------')
     psd_array_avg = psd_array / (count - 1)
@@ -120,32 +121,32 @@ for i in range(num_loops):
     # Save the File
     np.save(file_path, [psd_array_avg,freq_array_avg])
 
-    # Close any plots that might be open
+    # Close any Plots that Might be Open
     plt.close()
 
     # Plot Data
     if plot_flag == 1:
 
-        # Turn on interactive
+        # Turn on Interactive
         plt.ion()
 
-        # Plot the PSD of the averaged data
+        # Plot the PSD of the Averaged Data
         plt.figure(1)
         plt.plot(freq_array_avg, psd_array_avg)
         xlabel('Frequency (MHz)')
         ylabel('Samp Relative power (dB)')
         plt.title(str(date_time) + "  Uncr Avg PSD " + str(count-1) + " Traces: Loop " + str(i+1))
 
-        # Save the plot
+        # Save the Plot
         plt.savefig(file_path)
 
-        # Show the plot
+        # Show the Plot
         plt.show()
 
         # Pause
-        pause(1)
+        pause(3)
         
-        # Close the average plot
+        # Close the Average Plot
         plt.close()
             
     # Pause Before the Next Loop
@@ -154,13 +155,13 @@ for i in range(num_loops):
     # Close the File
     del file_path
     
-    # Close the plot
+    # Close the Plot
     plt.close()
 
 # Close the SDR
 sdr.close()
 
-# Close all plots
+# Close all Plots
 plt.close()
 
 # End Program

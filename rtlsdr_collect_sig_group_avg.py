@@ -78,21 +78,25 @@ for i in range(num_loops):
             ", File " + str(j+1) + " of " + str(num_group_loop))
 
         # Collect Data
-        samples = sdr.read_samples(num_samples)
+        #samples = sdr.read_samples(num_samples)
+        x = sdr.read_samples(num_samples)
 
         # Calculate PSD using FFT
         fft_x = np.fft.fft(x)
         Pxx = np.abs(fft_x)**2 / len(x)
-        f = np.fft.fftfreq(len(x), 1/fs)
+        f = np.fft.fftfreq(len(x), 1/sdr.sample_rate)
+
+        psd_samp = Pxx
+        freq_samp = f
 
         # Close Plot for PSD
-        plt.close()
+        #plt.close()
     
         # Generate the PSD of the Data Collected
-        psd_samp, freq_samp = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
+        #psd_samp, freq_samp = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
 
         # Close Plot for PSD
-        plt.close()
+        #plt.close()
 
 	    # Add to the PSD array
         psd_array = psd_array + psd_samp

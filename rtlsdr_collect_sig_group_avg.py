@@ -2,6 +2,7 @@ from pylab import *
 from rtlsdr import *
 from sys import platform
 
+
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,12 +18,12 @@ incline = 90                  # Angle of inclination of dish from earth horizon
 psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  4096
 
 # Set Number of Loops
-num_group_loop = 100 #100
-num_loops = 120 #120
+num_group_loop = 5 #100
+num_loops = 5 #120
 
 # Pause Time (sec)
 pause_group_time = 1 #1
-pause_loop_time = 400 #600
+pause_loop_time = 4 #600
 
 # Set a Plot Flag
 plot_flag = 1
@@ -40,11 +41,11 @@ date_time_dir = now.strftime("%Y%m%d__%H%M")
 if platform == "linux" or platform == "linux2":
     # linux
     print("OS is Linux ...")
-    file_path_dir = "/home/airscanner101/Data/" + date_time_dir + "/"
+    file_path_dir = "/home/airscanner100/Data/" + date_time_dir + "/"
 elif platform == "darwin":
     # OS X
     print("OS is Mac ...")
-    file_path_dir = "/home/airscanner101/Data/" + date_time_dir + "/"
+    file_path_dir = "/home/airscanner100/Data/" + date_time_dir + "/"
 elif platform == "win32":
     # Windows
     print("OS is Windows ...")
@@ -64,8 +65,11 @@ for i in range(num_loops):
     loop = str(i).rjust(3, '0')
 
     # Initialize Arrays for Averaging
-    psd_array = np.array(zeros(psd_nfft))
-    freq_array = np.array(zeros(psd_nfft))
+    #psd_array = np.array(zeros(psd_nfft))
+    #freq_array = np.array(zeros(psd_nfft))
+    
+    psd_array = np.zeros(psd_nfft)
+    freq_array = np.zeros(psd_nfft)
 
     for j in range(num_group_loop):
       
@@ -75,6 +79,11 @@ for i in range(num_loops):
 
         # Collect Data
         samples = sdr.read_samples(num_samples)
+
+        # Calculate PSD using FFT
+        fft_x = np.fft.fft(x)
+        Pxx = np.abs(fft_x)**2 / len(x)
+        f = np.fft.fftfreq(len(x), 1/fs)
 
         # Close Plot for PSD
         plt.close()

@@ -18,12 +18,12 @@ incline = 90                  # Angle of inclination of dish from earth horizon
 psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  4096
 
 # Set Number of Loops
-num_group_loop = 5 #100
-num_loops = 5 #120
+num_group_loop = 100 #100
+num_loops = 120 #120
 
 # Pause Time (sec)
 pause_group_time = 1 #1
-pause_loop_time = 4 #600
+pause_loop_time = 60 #600
 
 # Set a Plot Flag
 plot_flag = 1
@@ -55,6 +55,9 @@ elif platform == "win32":
 if not os.path.exists(file_path_dir):
     os.mkdir(file_path_dir)
 
+# Print the Start Time
+print("Start Time : ", time.ctime())
+
 # Collect Data
 for i in range(num_loops):
 
@@ -62,12 +65,9 @@ for i in range(num_loops):
     count = 1    # Counter
 
     # String Iteration
-    loop = str(i).rjust(3, '0')
+    loop = str(i+1).rjust(3, '0')
 
     # Initialize Arrays for Averaging
-    #psd_array = np.array(zeros(psd_nfft))
-    #freq_array = np.array(zeros(psd_nfft))
-    
     psd_array = np.zeros(psd_nfft)
     freq_array = np.zeros(psd_nfft)
 
@@ -78,25 +78,16 @@ for i in range(num_loops):
             ", File " + str(j+1) + " of " + str(num_group_loop))
 
         # Collect Data
-        #samples = sdr.read_samples(num_samples)
-        x = sdr.read_samples(num_samples)
-
-        # Calculate PSD using FFT
-        fft_x = np.fft.fft(x)
-        Pxx = np.abs(fft_x)**2 / len(x)
-        f = np.fft.fftfreq(len(x), 1/sdr.sample_rate)
-
-        psd_samp = Pxx
-        freq_samp = f
+        samples = sdr.read_samples(num_samples)
 
         # Close Plot for PSD
-        #plt.close()
+        plt.close()
     
         # Generate the PSD of the Data Collected
-        #psd_samp, freq_samp = psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
+        psd_samp, freq_samp = plt.psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
 
         # Close Plot for PSD
-        #plt.close()
+        plt.close()
 
 	    # Add to the PSD array
         psd_array = psd_array + psd_samp
@@ -106,7 +97,7 @@ for i in range(num_loops):
         count = count + 1
 
         # Pause
-        pause(pause_group_time)
+        time.sleep(pause_group_time)
 
     # Print Update
     print("Collected Loop " + str(i+1) + " of " + str(num_loops))
@@ -146,8 +137,8 @@ for i in range(num_loops):
         # Plot the PSD of the Averaged Data
         plt.figure(1)
         plt.plot(freq_array_avg, psd_array_avg)
-        xlabel('Frequency (MHz)')
-        ylabel('Samp Relative power (dB)')
+        plt.xlabel('Frequency (MHz)')
+        plt.ylabel('Samp Relative power (dB)')
         plt.title(str(date_time) + "  Uncr Avg PSD " + str(count-1) + " Traces: Loop " + str(i+1))
 
         # Save the Plot
@@ -157,13 +148,13 @@ for i in range(num_loops):
         plt.show()
 
         # Pause
-        pause(3)
+        time.sleep(4)
         
         # Close the Average Plot
         plt.close()
             
     # Pause Before the Next Loop
-    pause(pause_loop_time)
+    time.sleep(pause_loop_time)
 
     # Close the File
     del file_path
@@ -178,4 +169,6 @@ sdr.close()
 plt.close()
 
 # End Program
+# Print the End Time
+print("End Time : ", time.ctime())
 print('End Program')

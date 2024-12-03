@@ -19,11 +19,11 @@ psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  4096
 
 # Set Number of Loops
 num_group_loop = 100 #100
-num_loops = 120 #120
+num_loops = 220 #220
 
 # Pause Time (sec)
 pause_group_time = 1 #1
-pause_loop_time = 60 #600
+pause_loop_time = 90 #90
 
 # Set a Plot Flag
 plot_flag = 1

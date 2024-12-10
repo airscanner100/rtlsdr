@@ -1,1 +1,0 @@
-run rtlsdr_collect_sig_group_avg.py

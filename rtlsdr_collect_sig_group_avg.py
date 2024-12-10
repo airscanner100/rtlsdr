@@ -74,8 +74,8 @@ for i in range(num_loops):
     for j in range(num_group_loop):
       
         # Print Status
-        print(str(date_time_dir) + " Collected Group " + str(i+1) + " of " + str(num_loops) + 
-            ", File " + str(j+1) + " of " + str(num_group_loop))
+        print(str(date_time_dir) + " Group " + str(i+1) + "/" + str(num_loops) + 
+            ", File " + str(j+1) + "/" + str(num_group_loop))
 
         # Collect Data
         samples = sdr.read_samples(num_samples)

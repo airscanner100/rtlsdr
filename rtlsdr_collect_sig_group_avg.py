@@ -3,12 +3,14 @@ from rtlsdr import *
 from sys import platform
 
 
+
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 import time
 from datetime import datetime
 
+# Initialize the sdr object
 sdr = RtlSdr()
 
 # Initiate Variables
@@ -18,12 +20,12 @@ incline = 90                  # Angle of inclination of dish from earth horizon
 psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  4096
 
 # Set Number of Loops
-num_group_loop = 100 #100
-num_loops = 220 #220
+num_group_loop = 3 #100
+num_loops = 3 #220
 
 # Pause Time (sec)
 pause_group_time = 1 #1
-pause_loop_time = 90 #90
+pause_loop_time = 3 #90
 
 # Set a Plot Flag
 plot_flag = 1
@@ -74,7 +76,7 @@ for i in range(num_loops):
     for j in range(num_group_loop):
       
         # Print Status
-        print(str(date_time_dir) + " Group " + str(i+1) + "/" + str(num_loops) + 
+        print(date_time_dir + " Group " + str(i+1) + "/" + str(num_loops) + 
             ", File " + str(j+1) + "/" + str(num_group_loop))
 
         # Collect Data
@@ -167,6 +169,12 @@ sdr.close()
 
 # Close all Plots
 plt.close()
+
+# Uplaod Data
+if upload_flag == 1:
+
+
+
 
 # End Program
 # Print the End Time

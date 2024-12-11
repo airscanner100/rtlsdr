@@ -2,8 +2,6 @@ from pylab import *
 from rtlsdr import *
 from sys import platform
 
-
-
 import os
 import matplotlib.pyplot as plt
 import numpy as np

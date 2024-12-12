@@ -84,6 +84,7 @@ for i in range(num_loops):
     for j in range(num_group_loop):
 
 	# Update the time stamp
+	now = datetime.now()
         date_time_cur = now.strftime("%Y%m%d__%H%M%S")
         
         # Print Status

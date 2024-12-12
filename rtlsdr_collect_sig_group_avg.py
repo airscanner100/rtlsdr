@@ -84,7 +84,7 @@ for i in range(num_loops):
     for j in range(num_group_loop):
 
 	# Update the time stamp
-        date_time_cur = now.strftime("%Y%m%d__%H%M")
+        date_time_cur = now.strftime("%Y%m%d__%H%M%S")
         
         # Print Status
         print(date_time_cur + " Group " + str(i+1) + "/" + str(num_loops) + 

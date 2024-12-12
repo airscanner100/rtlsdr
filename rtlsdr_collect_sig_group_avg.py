@@ -82,9 +82,12 @@ for i in range(num_loops):
     freq_array = np.zeros(psd_nfft)
 
     for j in range(num_group_loop):
-      
+
+	# Update the time stamp
+        date_time_cur = now.strftime("%Y%m%d__%H%M")
+        
         # Print Status
-        print(date_time_dir + " Group " + str(i+1) + "/" + str(num_loops) + 
+        print(date_time_cur + " Group " + str(i+1) + "/" + str(num_loops) + 
             ", File " + str(j+1) + "/" + str(num_group_loop))
 
         # Collect Data

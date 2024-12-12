@@ -31,7 +31,7 @@ if data_flag == 1:
     num_loops = 200		# Set Number of Loops
     pause_group_time = 1 	# Pause Time (sec)
     pause_loop_time = 90	# Pause Time (sec)
-elif data_flag == 0
+elif data_flag == 0:
     num_group_loop = 3		# Set Number of Loops
     num_loops = 3		# Set Number of Loops
     pause_group_time = 1	# Pause Time (sec)

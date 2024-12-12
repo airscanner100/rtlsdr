@@ -11,22 +11,32 @@ from datetime import datetime
 # Initialize the sdr object
 sdr = RtlSdr()
 
+# Set a flag for Data Collection Mode (1) or Test Mode (0)
+data_flag = 0
+
+# Set a Plot Flag
+plot_flag = 1
+
+
 # Initiate Variables
 num_samples = 8 * 256 * 1024  # Number of samples to collect  8*256*1024
 direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
 incline = 90                  # Angle of inclination of dish from earth horizon
 psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  4096
 
-# Set Number of Loops
-num_group_loop = 3 #100
-num_loops = 3 #220
 
-# Pause Time (sec)
-pause_group_time = 1 #1
-pause_loop_time = 3 #90
+# Set Variables for Data Collection (1) or Test Mode (0)
+if data_flag == 1:   
+    num_group_loop = 100	# Set Number of Loops
+    num_loops = 200		# Set Number of Loops
+    pause_group_time = 1 	# Pause Time (sec)
+    pause_loop_time = 90	# Pause Time (sec)
+elif data_flag == 0
+    num_group_loop = 3		# Set Number of Loops
+    num_loops = 3		# Set Number of Loops
+    pause_group_time = 1	# Pause Time (sec)
+    pause_loop_time = 3		# Pause Time (sec)
 
-# Set a Plot Flag
-plot_flag = 1
 
 # Configure Device
 sdr.sample_rate = 2.4e6
@@ -168,8 +178,7 @@ sdr.close()
 # Close all Plots
 plt.close()
 
-# Uplaod Data
-if upload_flag == 1:
+# Upload the Results
 
 
 

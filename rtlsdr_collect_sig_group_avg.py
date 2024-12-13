@@ -12,7 +12,7 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 0
+data_flag = 1
 
 # Set a Plot Flag
 plot_flag = 1
@@ -27,14 +27,14 @@ psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  4096
 
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
-    num_group_loop = 100	# Set Number of Loops
-    num_loops = 200		# Set Number of Loops
-    pause_group_time = 1 	# Pause Time (sec)
-    pause_loop_time = 90	# Pause Time (sec)
+    num_group_loop = 50	        # Set Number of Loops
+    num_loops = 400		# Set Number of Loops
+    pause_group_time = 0.25 	# Pause Time (sec)
+    pause_loop_time = 45	# Pause Time (sec)
 elif data_flag == 0:
     num_group_loop = 3		# Set Number of Loops
     num_loops = 3		# Set Number of Loops
-    pause_group_time = 1	# Pause Time (sec)
+    pause_group_time = 3	# Pause Time (sec)
     pause_loop_time = 3		# Pause Time (sec)
 
 
@@ -82,9 +82,9 @@ for i in range(num_loops):
     freq_array = np.zeros(psd_nfft)
 
     for j in range(num_group_loop):
-
-	# Update the time stamp
-	now = datetime.now()
+      
+        # Update the time stamp
+        now = datetime.now()
         date_time_cur = now.strftime("%Y%m%d__%H%M%S")
         
         # Print Status

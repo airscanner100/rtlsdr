@@ -28,7 +28,7 @@ psd_nfft = 4096               # Length of PSD vectors (freq and magnitude)  4096
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
     num_group_loop = 60	        # Set Number of Loops  60
-    num_loops = 303		        # Set Number of Loops  303
+    num_loops = 320		        # Set Number of Loops  303
     pause_group_time = 0.20 	# Pause Time (sec)     0.2
     pause_loop_time = 45	    # Pause Time (sec)     45
 elif data_flag == 0:

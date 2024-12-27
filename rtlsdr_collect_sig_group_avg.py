@@ -28,9 +28,9 @@ psd_nfft = 8192               # Length of PSD vectors (freq and magnitude)  4096
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
     num_group_loop = 80	        # Set Number of Loops  80
-    num_loops = 250             # Set Number of Loops  250
+    num_loops = 200             # Set Number of Loops  250
     pause_group_time = 0.20 	# Pause Time (sec)     0.2
-    pause_loop_time = 90	    # Pause Time (sec)     45
+    pause_loop_time = 45	    # Pause Time (sec)     45
 elif data_flag == 0:
     num_group_loop = 3		    # Set Number of Loops
     num_loops = 3		        # Set Number of Loops
@@ -51,11 +51,11 @@ date_time_dir = now.strftime("%Y%m%d__%H%M")
 if platform == "linux" or platform == "linux2":
     # linux
     print("OS is Linux ...")
-    file_path_dir = "/home/airscanner100/Data/" + date_time_dir + "/"
+    file_path_dir = "/home/airscanner100/Documents/github/upload/" + date_time_dir + "/"
 elif platform == "darwin":
     # OS X
     print("OS is Mac ...")
-    file_path_dir = "/home/airscanner100/Data/" + date_time_dir + "/"
+    file_path_dir = "/home/airscanner100/Documents/github/upload" + date_time_dir + "/"
 elif platform == "win32":
     # Windows
     print("OS is Windows ...")
@@ -153,7 +153,7 @@ for i in range(num_loops):
         plt.plot(freq_array_avg, psd_array_avg)
         plt.xlabel('Frequency (MHz)')
         plt.ylabel('Samp Relative power (dB)')
-        plt.ylim(low_lim,None)
+        plt.ylim(low_limit,None)
         plt.title(str(date_time) + "  Uncr Avg PSD " + str(count-1) + " Traces: Loop " + str(i+1))
 
         # Save the Plot

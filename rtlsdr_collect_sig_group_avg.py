@@ -12,7 +12,7 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 0
+data_flag = 1
 
 # Set a Plot Flag
 plot_flag = 1
@@ -153,7 +153,7 @@ for i in range(num_loops):
         plt.plot(freq_array_avg, psd_array_avg)
         plt.xlabel('Frequency (MHz)')
         plt.ylabel('Samp Relative power (dB)')
-        plt.ylim(low_limit,None)
+        #plt.ylim(low_limit,None)
         plt.title(str(date_time) + "  Uncr Avg PSD " + str(count-1) + " Traces: Loop " + str(i+1))
 
         # Save the Plot

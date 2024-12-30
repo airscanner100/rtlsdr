@@ -18,7 +18,7 @@ data_flag = 1
 plot_flag = 1
 
 # Initiate Variables
-low_limit = 0.09              # Low limit for plot
+low_limit = 0.08              # Low limit for plot
 num_samples = 8 * 256 * 1024  # Number of samples to collect  8*256*1024
 direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
 incline = 90                  # Angle of inclination of dish from earth horizon
@@ -153,7 +153,7 @@ for i in range(num_loops):
         plt.plot(freq_array_avg, psd_array_avg)
         plt.xlabel('Frequency (MHz)')
         plt.ylabel('Samp Relative power (dB)')
-        #plt.ylim(low_limit,None)
+        plt.ylim(low_limit,None)
         plt.title(str(date_time) + "  Uncr Avg PSD " + str(count-1) + " Traces: Loop " + str(i+1))
 
         # Save the Plot

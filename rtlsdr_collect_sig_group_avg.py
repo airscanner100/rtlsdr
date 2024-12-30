@@ -30,7 +30,7 @@ if data_flag == 1:
     num_group_loop = 80	        # Set Number of Loops  80
     num_loops = 200             # Set Number of Loops  250
     pause_group_time = 0.20 	# Pause Time (sec)     0.2
-    pause_loop_time = 45	    # Pause Time (sec)     45
+    pause_loop_time = 100	    # Pause Time (sec)     100
 elif data_flag == 0:
     num_group_loop = 3		    # Set Number of Loops
     num_loops = 3		        # Set Number of Loops

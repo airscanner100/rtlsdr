@@ -18,7 +18,7 @@ data_flag = 1
 plot_flag = 1
 
 # Initiate Variables
-low_limit = 0.08              # Low limit for plot
+low_limit = 0.06              # Low limit for plot
 num_samples = 8 * 256 * 1024  # Number of samples to collect  8*256*1024
 direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
 incline = 90                  # Angle of inclination of dish from earth horizon
@@ -30,7 +30,7 @@ if data_flag == 1:
     num_group_loop = 80	        # Set Number of Loops  80
     num_loops = 200             # Set Number of Loops  250
     pause_group_time = 0.20 	# Pause Time (sec)     0.2
-    pause_loop_time = 100	    # Pause Time (sec)     100
+    pause_loop_time = 220	    # Pause Time (sec)     220
 elif data_flag == 0:
     num_group_loop = 3		    # Set Number of Loops
     num_loops = 3		        # Set Number of Loops

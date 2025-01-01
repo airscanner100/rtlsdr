@@ -12,10 +12,13 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 0
+data_flag = 1
 
 # Set a Plot Flag
 plot_flag = 1
+
+# Set a flag to subtract off baseline trace
+sub_flag = 1
 
 # Initiate Variables
 num_samples = 8 * 256 * 1024  # Number of samples to collect  8*256*1024
@@ -23,14 +26,13 @@ direction = 270               # Compass direction 0=North, 90=East, 180=South, 2
 incline = 90                  # Angle of inclination of dish from earth horizon
 psd_nfft = 8192               # Length of PSD vectors (freq and magnitude)  4096
 
-
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
     num_group_loop = 100	    # Set Number of Loops  100
     num_loops = 250             # Set Number of Loops  250
     pause_group_time = 1  	    # Pause Time (sec)     1
     pause_loop_time = 300	    # Pause Time (sec)     300
-    low_limit = 0.06			# Low limit for plot
+    low_limit = 0.00			# Low limit for plot   0.06
 elif data_flag == 0:
     num_group_loop = 3		    # Set Number of Loops
     num_loops = 3		        # Set Number of Loops
@@ -97,7 +99,11 @@ for i in range(num_loops):
         # Generate the PSD of the Data Collected
         psd_samp, freq_samp = plt.psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
 
-	    # Add to the PSD array
+        # Add to the baseline PSD array
+        if count == 1:
+            psd_samp_base = psd_samp
+        
+	    # Add to the loop PSD array
         psd_array = psd_array + psd_samp
         freq_array = freq_array + freq_samp
         
@@ -140,6 +146,10 @@ for i in range(num_loops):
     print('------------------------------------')
     psd_array_avg = psd_array / (count - 1)
     freq_array_avg = freq_array / (count - 1)
+
+    # Subtract off baseline
+    if sub_flag == 1:
+        psd_array_avg = psd_array_avg - psd_samp_base
 
     # Calculate the average of the averaged PSD Array
     psd_array_avg_mean = np.average(psd_array_avg)

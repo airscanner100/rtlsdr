@@ -44,8 +44,8 @@ elif data_flag == 0:
 sdr.sample_rate = 2.4e6         # 2.4e6 
 sdr.center_freq = 1420.4e6
 sdr.gain = 'auto' # 'auto' , 40, 49.6 is max 
-#list_gains = sdr.get_gains
-#sdr.init_device_values
+print("SDR Gain:")
+print(sdr.gain)
 
 # Prepare a Time Date String for Directory
 now = datetime.now()

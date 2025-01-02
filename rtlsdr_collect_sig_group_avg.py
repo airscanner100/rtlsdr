@@ -29,22 +29,23 @@ psd_nfft = 8192               # Length of PSD vectors (freq and magnitude)  4096
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
     num_group_loop = 100	    # Set Number of Loops  100
-    num_loops = 250             # Set Number of Loops  250
-    pause_group_time = 1  	    # Pause Time (sec)     1
-    pause_loop_time = 300	    # Pause Time (sec)     300
+    num_loops = 300             # Set Number of Loops  250
+    pause_group_time = 0.5  	# Pause Time (sec)     1
+    pause_loop_time = 360	    # Pause Time (sec)     300
     low_limit = 0.00			# Low limit for plot   0.06
 elif data_flag == 0:
-    num_group_loop = 3		    # Set Number of Loops
-    num_loops = 3		        # Set Number of Loops
-    pause_group_time = 3	    # Pause Time (sec)
-    pause_loop_time = 3		    # Pause Time (sec)
-    low_limit = 0.0				# Low limit for plot
-
-
+    num_group_loop = 10		    # Set Number of Loops
+    num_loops = 2		        # Set Number of Loops
+    pause_group_time = 1	    # Pause Time (sec)
+    pause_loop_time = 1		    # Pause Time (sec)
+    low_limit = 0.00				# Low limit for plot
+    
 # Configure Device
 sdr.sample_rate = 2.4e6         # 2.4e6 
 sdr.center_freq = 1420.4e6
-sdr.gain = 50 # 'auto'
+sdr.gain = 'auto' # 'auto' , 40, 49.6 is max 
+#list_gains = sdr.get_gains
+#sdr.init_device_values
 
 # Prepare a Time Date String for Directory
 now = datetime.now()

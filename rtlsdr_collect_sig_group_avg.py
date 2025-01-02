@@ -18,7 +18,7 @@ data_flag = 1
 plot_flag = 1
 
 # Set a flag to subtract off baseline trace
-sub_flag = 1
+sub_flag = 0
 
 # Initiate Variables
 num_samples = 8 * 256 * 1024  # Number of samples to collect  8*256*1024

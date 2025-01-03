@@ -12,7 +12,7 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 1
+data_flag = 0
 
 # Set a Plot Flag
 plot_flag = 1
@@ -29,12 +29,12 @@ psd_nfft = 8192               # Length of PSD vectors (freq and magnitude)  4096
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
     num_group_loop = 100	    # Set Number of Loops  100
-    num_loops = 300             # Set Number of Loops  250
+    num_loops = 150             # Set Number of Loops  150
     pause_group_time = 0.5  	# Pause Time (sec)     1
     pause_loop_time = 360	    # Pause Time (sec)     300
     low_limit = 0.00			# Low limit for plot   0.06
 elif data_flag == 0:
-    num_group_loop = 10		    # Set Number of Loops
+    num_group_loop = 5		    # Set Number of Loops
     num_loops = 2		        # Set Number of Loops
     pause_group_time = 1	    # Pause Time (sec)
     pause_loop_time = 1		    # Pause Time (sec)
@@ -44,8 +44,9 @@ elif data_flag == 0:
 sdr.sample_rate = 2.4e6         # 2.4e6 
 sdr.center_freq = 1420.4e6
 sdr.gain = 'auto' # 'auto' , 40, 49.6 is max 
-print("SDR Gain:")
-print(sdr.gain)
+
+print("SDR Gain = " + str(sdr.gain))
+
 
 # Prepare a Time Date String for Directory
 now = datetime.now()
@@ -114,7 +115,8 @@ for i in range(num_loops):
         # Print Status
         print(date_time_cur + " Group " + str(i+1) + "/" + str(num_loops) + 
             ", File " + str(j+1) + "/" + str(num_group_loop) + 
-            ", PSDAvg=" + f"{psd_samp_mean:.2e}")
+            ", PSDAvg=" + f"{psd_samp_mean:.2e}" +
+            ", SDRGain=" + str(sdr.gain))
        
         # Close Plot for PSD
         plt.close()
@@ -173,9 +175,9 @@ for i in range(num_loops):
         plt.xlabel('Frequency (MHz)')
         plt.ylabel('Samp Relative power (dB)')
         plt.ylim(low_limit,None)
-        plt.title(str(date_time) + "  UncrAvgPSD " + str(count-1) + 
-            " Traces: Loop " + str(i+1) + " PSDAVg=" + 
-            f"{psd_array_avg_mean:.2e}")
+        plt.title(str(date_time) + "," + str(count-1) + 
+            " Traces, Loop " + str(i+1) + ", AVg=" + 
+            f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
 
         # Save the Plot
         plt.savefig(file_path)

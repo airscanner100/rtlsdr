@@ -12,7 +12,7 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 0
+data_flag = 1
 
 # Set a Plot Flag
 plot_flag = 1
@@ -32,7 +32,7 @@ if data_flag == 1:
     num_loops = 150             # Set Number of Loops  150
     pause_group_time = 0.5  	# Pause Time (sec)     1
     pause_loop_time = 360	    # Pause Time (sec)     300
-    low_limit = 0.00			# Low limit for plot   0.06
+    low_limit = 0.2			    # Low limit for plot   0.2
 elif data_flag == 0:
     num_group_loop = 5		    # Set Number of Loops
     num_loops = 2		        # Set Number of Loops
@@ -43,7 +43,7 @@ elif data_flag == 0:
 # Configure Device
 sdr.sample_rate = 2.4e6         # 2.4e6 
 sdr.center_freq = 1420.4e6
-sdr.gain = 'auto' # 'auto' , 40, 49.6 is max 
+sdr.gain = 'auto' # 'auto' 
 
 print("SDR Gain = " + str(sdr.gain))
 

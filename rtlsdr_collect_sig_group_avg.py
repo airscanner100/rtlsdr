@@ -32,7 +32,7 @@ if data_flag == 1:
     num_loops = 165             # Set Number of Loops  165 for 24 hrs
     pause_group_time = 0.5  	# Pause Time (sec)     1
     pause_loop_time = 360	    # Pause Time (sec)     300
-    low_limit = 0.2			    # Low limit for plot   0.2
+    low_limit = 0.1			    # Low limit for plot   0.1 (v4)
 elif data_flag == 0:
     num_group_loop = 5		    # Set Number of Loops
     num_loops = 2		        # Set Number of Loops

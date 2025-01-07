@@ -23,8 +23,9 @@ sub_flag = 0
 # Initiate Variables
 num_samples = 8 * 256 * 1024  # Number of samples to collect  8*256*1024
 direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
-incline = 90                  # Angle of inclination of dish from earth horizon
-psd_nfft = 8192               # Length of PSD vectors (freq and magnitude)  4096
+incline_ew = 90               # Angle of inclination of dish from earth horizon ref east = 0
+incline_ns = 135              # Angle of inclination of dish from earth horizon ref north = 0
+psd_nfft = 8192 * 2           # Length of PSD vectors (freq and magnitude)  8192
 
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
@@ -32,13 +33,13 @@ if data_flag == 1:
     num_loops = 165             # Set Number of Loops  165 for 24 hrs
     pause_group_time = 0.5  	# Pause Time (sec)     1
     pause_loop_time = 360	    # Pause Time (sec)     300
-    low_limit = 0.1			    # Low limit for plot   0.1 (v4)
+    low_limit = 0.10			# Low limit for plot   0.10 (v4)
 elif data_flag == 0:
     num_group_loop = 5		    # Set Number of Loops
     num_loops = 2		        # Set Number of Loops
     pause_group_time = 1	    # Pause Time (sec)
     pause_loop_time = 1		    # Pause Time (sec)
-    low_limit = 0.00				# Low limit for plot
+    low_limit = 0.00		    # Low limit for plot
     
 # Configure Device
 sdr.sample_rate = 2.4e6         # 2.4e6 
@@ -46,7 +47,6 @@ sdr.center_freq = 1420.4e6
 sdr.gain = 'auto' # 'auto' 
 
 print("SDR Gain = " + str(sdr.gain))
-
 
 # Prepare a Time Date String for Directory
 now = datetime.now()
@@ -142,7 +142,7 @@ for i in range(num_loops):
     group_loop = str(j+1).rjust(3, '0')
 
     # Create a Complete Filename
-    file_path = file_path_dir + loop + "__avg__" + date_time + f"{direction:03d}" + "_" + f"{incline:03d}"
+    file_path = file_path_dir + loop + "__avg__" + date_time + f"{direction:03d}" + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
 
     # Generate an Average PSD
     print('Generating an Averaged Signal Result')

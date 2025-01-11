@@ -12,7 +12,7 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 1
+data_flag = 0
 
 # Set a Plot Flag
 plot_flag = 1
@@ -186,7 +186,7 @@ for i in range(num_loops):
         plt.show()
 
         # Pause
-        time.sleep(4)
+        time.sleep(1)
         
         # Close the Average Plot
         plt.close()

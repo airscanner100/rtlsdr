@@ -21,7 +21,7 @@ plot_flag = 1
 sub_flag = 0
 
 # Initiate Variables
-num_samples = 8 * 256 * 1024  # Number of samples to collect  8*256*1024
+num_samples = 4 * 256 * 1024  # Number of samples to collect  8*256*1024
 direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
 incline_ew = 90               # Angle of inclination of dish from earth horizon ref east = 0
 incline_ns = 135              # Angle of inclination of dish from earth horizon ref north = 0
@@ -29,17 +29,21 @@ psd_nfft = 8192 * 2           # Length of PSD vectors (freq and magnitude)  8192
 
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
-    num_group_loop = 100	    # Set Number of Loops  100
-    num_loops = 165             # Set Number of Loops  165 for 24 hrs
-    pause_group_time = 0.5  	# Pause Time (sec)     1
+    num_group_loop = 300	    # Set Number of Loops  100
+    num_loops = 140             # Set Number of Loops  165 for 24 hrs
+    pause_group_time = 0.01  	# Pause Time (sec)     1
     pause_loop_time = 360	    # Pause Time (sec)     300
     low_limit = 0.10			# Low limit for plot   0.10 (v4)
+    x_low = 1419.75
+    x_high = 1421.25
 elif data_flag == 0:
-    num_group_loop = 5		    # Set Number of Loops
+    num_group_loop = 300		# Set Number of Loops
     num_loops = 2		        # Set Number of Loops
-    pause_group_time = 1	    # Pause Time (sec)
-    pause_loop_time = 1		    # Pause Time (sec)
+    pause_group_time = 0.01	    # Pause Time (sec)
+    pause_loop_time = 5		    # Pause Time (sec)
     low_limit = 0.00		    # Low limit for plot
+    x_low = 1419.75
+    x_high = 1421.25
     
 # Configure Device
 sdr.sample_rate = 2.4e6         # 2.4e6 
@@ -175,6 +179,7 @@ for i in range(num_loops):
         plt.xlabel('Frequency (MHz)')
         plt.ylabel('Samp Relative power (dB)')
         plt.ylim(low_limit,None)
+        plt.xlim(x_low, x_high)
         plt.title(str(date_time) + "," + str(count-1) + 
             " Traces, Loop " + str(i+1) + ", AVg=" + 
             f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))

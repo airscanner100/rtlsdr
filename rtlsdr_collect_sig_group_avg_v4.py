@@ -12,13 +12,13 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 1
+data_flag = 0
 
 # Set a Plot Flag
 plot_flag = 1
 
 # Set a flag to subtract off baseline trace
-sub_flag = 0
+sub_flag = 1
 
 # Initiate Variables
 num_samples = 8 * 256 * 1024  # Number of samples to collect  4*256*1024
@@ -34,16 +34,16 @@ if data_flag == 1:
     pause_group_time = 0.01  	# Pause Time (sec)     1
     pause_loop_time = 300	    # Pause Time (sec)     300
     low_limit = 0.10			# Low limit for plot   0.10 (v4)
-    x_low = 1419.75
-    x_high = 1421.25
+    x_low = 1419
+    x_high = 1422
 elif data_flag == 0:
-    num_group_loop = 300		# Set Number of Loops
-    num_loops = 2		        # Set Number of Loops
+    num_group_loop = 30 		# Set Number of Loops
+    num_loops = 3		        # Set Number of Loops
     pause_group_time = 0.01	    # Pause Time (sec)
     pause_loop_time = 5		    # Pause Time (sec)
     low_limit = 0.00		    # Low limit for plot
-    x_low = 1419.75
-    x_high = 1421.25
+    x_low = 1419
+    x_high = 1422
     
 # Configure Device
 sdr.sample_rate = 2.4e6         # 2.4e6 
@@ -104,10 +104,6 @@ for i in range(num_loops):
     
         # Generate the PSD of the Data Collected
         psd_samp, freq_samp = plt.psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
-
-        # Add to the baseline PSD array
-        if count == 1:
-            psd_samp_base = psd_samp
         
 	    # Add to the loop PSD array
         psd_array = psd_array + psd_samp
@@ -131,6 +127,11 @@ for i in range(num_loops):
         # Pause
         time.sleep(pause_group_time)
 
+    # Add to the baseline PSD array
+    if i+1 == 1 and sub_flag == 1:
+	    print("Count = " + str(count-1) + " Collected Reference Sample")
+	    psd_samp_base = psd_samp_mean
+        
     # Print Update
     print("Collected Loop " + str(i+1) + " of " + str(num_loops))
 
@@ -157,7 +158,8 @@ for i in range(num_loops):
 
     # Subtract off baseline
     if sub_flag == 1:
-        psd_array_avg = psd_array_avg - psd_samp_base
+	    print("Subtracting off the baseline signal")
+	    psd_array_avg = psd_array_avg - psd_samp_base
 
     # Calculate the average of the averaged PSD Array
     psd_array_avg_mean = np.average(psd_array_avg)

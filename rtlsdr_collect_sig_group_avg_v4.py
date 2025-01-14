@@ -60,15 +60,15 @@ date_time_dir = now.strftime("%Y%m%d__%H%M")
 if platform == "linux" or platform == "linux2":
     # linux
     print("OS is Linux ...")
-    file_path_dir = "/home/airscanner100/Documents/github/upload/" + date_time_dir + "/"
+    file_path_dir = "/home/airscanner100/Documents/github/results/" + date_time_dir + "/"
 elif platform == "darwin":
     # OS X
     print("OS is Mac ...")
-    file_path_dir = "/home/airscanner100/Documents/github/upload" + date_time_dir + "/"
+    file_path_dir = "/home/airscanner100/Documents/github/results" + date_time_dir + "/"
 elif platform == "win32":
     # Windows
     print("OS is Windows ...")
-    file_path_dir = "C:\\Scan_Files\\data\\" + date_time_dir + "\\"
+    file_path_dir = "C:\\Scan_Files\\results\\" + date_time_dir + "\\"
 
 # Create Directory if Necessary
 if not os.path.exists(file_path_dir):

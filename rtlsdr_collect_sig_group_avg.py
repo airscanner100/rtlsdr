@@ -12,7 +12,7 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 0
+data_flag = 1
 
 # Set a Plot Flag
 plot_flag = 1
@@ -21,18 +21,18 @@ plot_flag = 1
 sub_flag = 0
 
 # Initiate Variables
-num_samples = 4 * 256 * 1024  # Number of samples to collect  8*256*1024
-direction = 270               # Compass direction 0=North, 90=East, 180=South, 270=West
-incline_ew = 90               # Angle of inclination of dish from earth horizon ref east = 0
-incline_ns = 135              # Angle of inclination of dish from earth horizon ref north = 0
-psd_nfft = 8192 * 2           # Length of PSD vectors (freq and magnitude)  8192
+num_samples = 8 * 256 * 1024  # Number of samples to collect  4*256*1024
+gps = "27VP+QQ"               # GPS location in Google Maps Plus Code
+incline_ew = 90               # Angle of inclination of dish from earth horizon ref east = 0, west = 180
+incline_ns = 135              # Angle of inclination of dish from earth horizon ref north = 0, south = 180
+psd_nfft = 8192 * 2           # Length of PSD vectors (freq and magnitude)  8192 * 2
 
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
     num_group_loop = 300	    # Set Number of Loops  100
     num_loops = 140             # Set Number of Loops  165 for 24 hrs
     pause_group_time = 0.01  	# Pause Time (sec)     1
-    pause_loop_time = 360	    # Pause Time (sec)     300
+    pause_loop_time = 300	    # Pause Time (sec)     300
     low_limit = 0.10			# Low limit for plot   0.10 (v4)
     x_low = 1419.75
     x_high = 1421.25
@@ -141,12 +141,13 @@ for i in range(num_loops):
     day = now.strftime("%d")
     time_now = now.strftime("%H:%M:%S")
     date_time = now.strftime("%Y%m%d__%H%M%S__")
+    date_time_short = now.strftime("%Y%m%d__%H%M")
 
     # String Iteration
     group_loop = str(j+1).rjust(3, '0')
 
     # Create a Complete Filename
-    file_path = file_path_dir + loop + "__avg__" + date_time + f"{direction:03d}" + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
+    file_path = file_path_dir + loop + "__avg__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
 
     # Generate an Average PSD
     print('Generating an Averaged Signal Result')
@@ -180,8 +181,8 @@ for i in range(num_loops):
         plt.ylabel('Samp Relative power (dB)')
         plt.ylim(low_limit,None)
         plt.xlim(x_low, x_high)
-        plt.title(str(date_time) + "," + str(count-1) + 
-            " Traces, Loop " + str(i+1) + ", AVg=" + 
+        plt.title(str(date_time_short) + "," + str(count-1) + 
+            " Trcs, Batch " + str(i+1) + ", AVg=" + 
             f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
 
         # Save the Plot

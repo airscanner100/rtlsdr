@@ -33,7 +33,7 @@ if data_flag == 1:
     num_loops = 140             # Set Number of Loops  165 for 24 hrs
     pause_group_time = 0.01  	# Pause Time (sec)     1
     pause_loop_time = 300	    # Pause Time (sec)     300
-    low_limit = 0.10			# Low limit for plot   0.10 (v4)
+    low_limit = -0.2			# Low limit for plot   0.10 (v4)
     x_low = 1419
     x_high = 1422
 elif data_flag == 0:
@@ -41,9 +41,6 @@ elif data_flag == 0:
     num_loops = 3		        # Set Number of Loops
     pause_group_time = 0.01	    # Pause Time (sec)
     pause_loop_time = 5		    # Pause Time (sec)
-    low_limit = 0.00		    # Low limit for plot
-    x_low = 1419
-    x_high = 1422
     
 # Configure Device
 sdr.sample_rate = 2.4e6         # 2.4e6 
@@ -89,6 +86,8 @@ for i in range(num_loops):
     # Initialize Arrays for Averaging
     psd_array = np.zeros(psd_nfft)
     freq_array = np.zeros(psd_nfft)
+    psd_array_avg_sub = np.zeros(psd_nfft)
+    psd_array_avg = np.zeros(psd_nfft)
 
     for j in range(num_group_loop):
       
@@ -117,6 +116,8 @@ for i in range(num_loops):
             ", File " + str(j+1) + "/" + str(num_group_loop) + 
             ", PSDAvg=" + f"{psd_samp_mean:.2e}" +
             ", SDRGain=" + str(sdr.gain))
+        
+        print(sdr.gain)       
        
         # Close Plot for PSD
         plt.close()
@@ -127,11 +128,6 @@ for i in range(num_loops):
         # Pause
         time.sleep(pause_group_time)
 
-    # Add to the baseline PSD array
-    if i+1 == 1 and sub_flag == 1:
-	    print("Count = " + str(count-1) + " Collected Reference Sample")
-	    psd_samp_base = psd_samp_mean
-        
     # Print Update
     print("Collected Loop " + str(i+1) + " of " + str(num_loops))
 
@@ -156,14 +152,14 @@ for i in range(num_loops):
     psd_array_avg = psd_array / (count - 1)
     freq_array_avg = freq_array / (count - 1)
 
-    # Subtract off baseline
-    if sub_flag == 1:
-	    print("Subtracting off the baseline signal")
-	    psd_array_avg = psd_array_avg - psd_samp_base
-
-    # Calculate the average of the averaged PSD Array
+    # Calculate the average of the averaged PSD Array (single value)
     psd_array_avg_mean = np.average(psd_array_avg)
 
+    # Add to the baseline PSD array
+    if i+1 == 1 and sub_flag == 1:
+	    print("Count = " + str(count-1) + " Collected Reference Sample")
+	    psd_samp_base = psd_array_avg
+	    
     # Save the File
     np.save(file_path, [psd_array_avg,freq_array_avg],psd_array_avg_mean)
 
@@ -181,23 +177,41 @@ for i in range(num_loops):
         plt.plot(freq_array_avg, psd_array_avg)
         plt.xlabel('Frequency (MHz)')
         plt.ylabel('Samp Relative power (dB)')
-        plt.ylim(low_limit,None)
-        plt.xlim(x_low, x_high)
         plt.title(str(date_time_short) + "," + str(count-1) + 
             " Trcs, Batch " + str(i+1) + ", AVg=" + 
             f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
-
+        if data_flag == 1
+            plt.ylim(low_limit,None)
+            plt.xlim(x_low, x_high)
+            
         # Save the Plot
         plt.savefig(file_path)
 
         # Show the Plot
-        plt.show()
-
+        plt.show()    
+        
         # Pause
         time.sleep(1)
         
         # Close the Average Plot
         plt.close()
+
+		# Subtract off baseline
+		if sub_flag == 1:
+			print("Subtracting off the baseline signal")
+			psd_array_avg_sub = psd_array_avg - psd_samp_base
+	                
+			plt.figure(2)
+			plt.plot(freq_array_avg, psd_array_avg_sub)
+			plt.xlabel('Frequency (MHz)')
+			plt.ylabel('Samp Relative power (dB)')
+			plt.title(str(date_time_short) + "," + str(count-1) + 
+				" Trcs, Batch " + str(i+1) + ", AVg=" + 
+				f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
+			if data_flag == 1
+				plt.ylim(low_limit,None)
+				plt.xlim(x_low, x_high)
+    
             
     # Pause Before the Next Loop
     time.sleep(pause_loop_time)

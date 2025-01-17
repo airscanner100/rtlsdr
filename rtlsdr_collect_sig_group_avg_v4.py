@@ -144,7 +144,6 @@ for i in range(num_loops):
     # Create a Complete Filename
     file_path = file_path_dir + loop + "__avg_raw__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
     file_path_sub = file_path_dir + loop + "__avg_sub__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
-
     
     # Generate an Average PSD
     print('Generating an Averaged Signal Result')

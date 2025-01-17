@@ -116,9 +116,7 @@ for i in range(num_loops):
             ", File " + str(j+1) + "/" + str(num_group_loop) + 
             ", PSDAvg=" + f"{psd_samp_mean:.2e}" +
             ", SDRGain=" + str(sdr.gain))
-        
-        print(sdr.gain)       
-       
+               
         # Close Plot for PSD
         plt.close()
        
@@ -144,11 +142,12 @@ for i in range(num_loops):
     group_loop = str(j+1).rjust(3, '0')
 
     # Create a Complete Filename
-    file_path = file_path_dir + loop + "__avg__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
+    file_path = file_path_dir + loop + "__avg_raw__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
+    file_path_sub = file_path_dir + loop + "__avg_sub__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
 
+    
     # Generate an Average PSD
     print('Generating an Averaged Signal Result')
-    print('------------------------------------')
     psd_array_avg = psd_array / (count - 1)
     freq_array_avg = freq_array / (count - 1)
 
@@ -180,7 +179,7 @@ for i in range(num_loops):
         plt.title(str(date_time_short) + "," + str(count-1) + 
             " Trcs, Batch " + str(i+1) + ", AVg=" + 
             f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
-        if data_flag == 1
+        if data_flag == 1:
             plt.ylim(low_limit,None)
             plt.xlim(x_low, x_high)
             
@@ -196,23 +195,37 @@ for i in range(num_loops):
         # Close the Average Plot
         plt.close()
 
-		# Subtract off baseline
-		if sub_flag == 1:
-			print("Subtracting off the baseline signal")
-			psd_array_avg_sub = psd_array_avg - psd_samp_base
-	                
-			plt.figure(2)
-			plt.plot(freq_array_avg, psd_array_avg_sub)
-			plt.xlabel('Frequency (MHz)')
-			plt.ylabel('Samp Relative power (dB)')
-			plt.title(str(date_time_short) + "," + str(count-1) + 
-				" Trcs, Batch " + str(i+1) + ", AVg=" + 
-				f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
-			if data_flag == 1
-				plt.ylim(low_limit,None)
-				plt.xlim(x_low, x_high)
-    
+		# Plot the PSD of the Averaged Data with the Baseline Subtracted
+        if sub_flag == 1:
+            print("Subtracting off the baseline signal")
+            psd_array_avg_sub = psd_array_avg - psd_samp_base
+	        
+	        # Plot a figure subtracted off the baseline signal        
+            plt.figure(2)
+            plt.plot(freq_array_avg, psd_array_avg_sub)
+            plt.xlabel('Frequency (MHz)')
+            plt.ylabel('Samp Relative power (dB)')
+            plt.title(str(date_time_short) + "," + str(count-1) + 
+                " Trcs, Batch " + str(i+1) + ", AVg=" + 
+                f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
+            if data_flag == 1:
+                plt.ylim(low_limit,None)
+                plt.xlim(x_low, x_high)
+        
+        # Save the Plot
+        plt.savefig(file_path_sub)
+
+        # Show the Plot
+        plt.show()              
             
+        # Pause
+        time.sleep(1)
+        
+        # Close the Average Plot
+        plt.close()            
+
+    print('------------------------------------')
+             
     # Pause Before the Next Loop
     time.sleep(pause_loop_time)
 

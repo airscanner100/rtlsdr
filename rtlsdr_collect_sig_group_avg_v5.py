@@ -12,7 +12,7 @@ from datetime import datetime
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 0
+data_flag = 1
 
 # Set a Plot Flag
 plot_flag = 1
@@ -30,14 +30,14 @@ psd_nfft = 8192 * 2           # Length of PSD vectors (freq and magnitude)  8192
 # Set Variables for Data Collection (1) or Test Mode (0)
 if data_flag == 1:   
     num_group_loop = 300	    # Set Number of Loops  100
-    num_loops = 140             # Set Number of Loops  165 for 24 hrs
+    num_loops = 125             # Set Number of Loops  125 for 24 hrs
     pause_group_time = 0.01  	# Pause Time (sec)     1
     pause_loop_time = 300	    # Pause Time (sec)     300
     low_limit = -0.2			# Low limit for plot   0.10 (v4)
     x_low = 1419
     x_high = 1422
 elif data_flag == 0:
-    num_group_loop = 3  		# Set Number of Loops (30)
+    num_group_loop = 30  		# Set Number of Loops (30)
     num_loops = 3		        # Set Number of Loops
     pause_group_time = 0.01	    # Pause Time (sec)
     pause_loop_time = 5		    # Pause Time (sec)

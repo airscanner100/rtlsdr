@@ -33,7 +33,7 @@ if data_flag == 1:
     num_loops = 125             # Set Number of Loops  125 for 24 hrs
     pause_group_time = 0.01  	# Pause Time (sec)     1
     pause_loop_time = 300	    # Pause Time (sec)     300
-    low_limit = -0.2			# Low limit for plot   0.10 (v4)
+    low_limit = -0.15			# Low limit for plot   0.10 (v4)
     x_low = 1419
     x_high = 1422
 elif data_flag == 0:
@@ -196,7 +196,7 @@ for i in range(num_loops):
             " Trcs, Batch " + str(i+1) + ", AVg=" + 
             f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
         if data_flag == 1:
-            plt.ylim(low_limit,None)
+            plt.ylim(low_limit, 2 * -low_limit)
             plt.xlim(x_low, x_high)
             
         # Save the Plot
@@ -225,7 +225,7 @@ for i in range(num_loops):
                 " Trcs, Batch " + str(i+1) + ", AVg=" + 
                 f"{psd_array_avg_mean:.2e}" + ", SDRGain=" + str(sdr.gain))
             if data_flag == 1:
-                plt.ylim(low_limit,None)
+                plt.ylim(low_limit,2 * -low_limit)
                 plt.xlim(x_low, x_high)
         
         # Save the Plot

@@ -157,9 +157,9 @@ for i in range(num_loops):
     group_loop = str(j+1).rjust(3, '0')
 
     # Create Complete Filenames
-    file_path_dat = file_path_dir_dat + loop + "__avg_dat__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
-    file_path_raw = file_path_dir_raw + loop + "__avg_raw__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
-    file_path_sub = file_path_dir_sub + loop + "__avg_sub__" + date_time + gps + "_" + f"{incline_ns:03d}" + "_" + f"{incline_ew:03d}"
+    file_path_dat = file_path_dir_dat + loop + "__avg_dat__" + date_time + gps + "_NS" + f"{incline_ns:03d}" + "_EW" + f"{incline_ew:03d}"
+    file_path_raw = file_path_dir_raw + loop + "__avg_raw__" + date_time + gps + "_NS" + f"{incline_ns:03d}" + "_EW" + f"{incline_ew:03d}"
+    file_path_sub = file_path_dir_sub + loop + "__avg_sub__" + date_time + gps + "_NS" + f"{incline_ns:03d}" + "_EW" + f"{incline_ew:03d}"
     
     # Generate an Average PSD
     print('Generating an Averaged Signal Result')

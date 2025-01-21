@@ -8,6 +8,9 @@ from datetime import datetime
 # Set a flag
 plot_flag = 1
 
+# Set parameter
+low_limit = -0.10
+
 # Print the Start Time
 print("Str Time : ", time.ctime())
 
@@ -29,6 +32,7 @@ if plot_flag == 1:
     plt.xlabel('Frequency (MHz)')
     plt.ylabel('Samp Relative power (dB)')
     plt.title(" Data  Avg_PSD=" + f"{psd_array_avg_mean:0.3f}")
+    plt.ylim(low_limit, 3 * -low_limit)
 
     # Show the Plot
     plt.show()

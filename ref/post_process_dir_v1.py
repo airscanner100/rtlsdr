@@ -3,7 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
+# Set flag
 plot_flag = 1
+
+# Set parameters
+low_limit = -0.10
 
 def process_files(directory):
     for filename in os.listdir(directory):
@@ -37,6 +41,7 @@ def process_files(directory):
                     plt.xlabel('Frequency (MHz)')
                     plt.ylabel('Samp Relative power (dB)')
                     plt.title(prefix + " Avg_PSD=" + f"{psd_array_avg_mean:0.3f}")
+                    plt.ylim(low_limit - low_limit, 4 * -low_limit)
 
                     # Show the Plot
                     plt.show()

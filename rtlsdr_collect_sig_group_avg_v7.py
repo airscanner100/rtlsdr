@@ -22,19 +22,18 @@ def list_png_files(directory):
 # Generate a GIF from the PNG files 
 def generate_gif(in_files, out_files):    
     images = []
+    print('Generating GIF...')
     for path in in_files:
-        print('Found PNG file...')
         images.append(iio.imread(path))
     iio.imwrite(out_files, images, duration = 0.33, loop = 0)
     
 ####################  End Functions ####################    
 
-
 # Initialize the sdr object
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 0
+data_flag = 1
 
 # Set a Plot Flag
 plot_flag = 1
@@ -199,7 +198,8 @@ for i in range(num_loops):
 
     # Add to the baseline PSD array
     if i+1 == 1 and sub_flag == 1:
-	    print("Count = " + str(count-1) + " Collected Reference Sample")
+	    print("Count = " + str(count-1))
+	    print(" Collected Reference Sample")
 	    psd_samp_base = psd_array_avg
 
     # Save the File

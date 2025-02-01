@@ -7,12 +7,34 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 from datetime import datetime
+import imageio.v3 as iio
+
+####################  Functions #######################
+# Create a list files in a directory sorted alphabetically
+def list_png_files(directory):
+    png_files = []
+    for filename in os.listdir(directory):
+        if filename.endswith(".png"):
+            png_files.append(os.path.join(directory, filename))
+    png_files.sort()
+    return png_files
+
+# Generate a GIF from the PNG files 
+def generate_gif(in_files, out_files):    
+    images = []
+    for path in in_files:
+        print('Found PNG file...')
+        images.append(iio.imread(path))
+    iio.imwrite(out_files, images, duration = 0.33, loop = 0)
+    
+####################  End Functions ####################    
+
 
 # Initialize the sdr object
 sdr = RtlSdr()
 
 # Set a flag for Data Collection Mode (1) or Test Mode (0)
-data_flag = 1
+data_flag = 0
 
 # Set a Plot Flag
 plot_flag = 1
@@ -24,7 +46,7 @@ sub_flag = 1
 num_samples = 8 * 256 * 1024  # Number of samples to collect  4*256*1024
 gps = "27XQ+33"               # GPS location in Google Maps Plus Code
 incline_ew = 90               # Angle of inclination of dish from earth horizon ref east = 0, west = 180
-incline_ns = 90              # Angle of inclination of dish from earth horizon ref north = 0, south = 180
+incline_ns = 90               # Angle of inclination of dish from earth horizon ref north = 0, south = 180
 psd_nfft = 8192 * 2           # Length of PSD vectors (freq and magnitude)  8192 * 2
 
 # Set Variables for Data Collection (1) or Test Mode (0)
@@ -33,26 +55,26 @@ if data_flag == 1:
     num_loops = 120             # Set Number of Loops  120 for 24 hrs
     pause_group_time = 0.01  	# Pause Time (sec)     1
     pause_loop_time = 300	    # Pause Time (sec)     300
-    low_limit = -0.10			# Low limit for plot   0.10 (v4)
+    low_limit = -0.10	        # Low limit for plot   0.10 (v4)
     x_low = 1419
     x_high = 1422
 elif data_flag == 0:
-    num_group_loop = 30  		# Set Number of Loops (30)
-    num_loops = 3		        # Set Number of Loops
-    pause_group_time = 0.01	    # Pause Time (sec)
-    pause_loop_time = 5		    # Pause Time (sec)
-    
+    num_group_loop = 5          # Set Number of Loops (30)
+    num_loops = 3               # Set Number of Loops
+    pause_group_time = 0.01     # Pause Time (sec)
+    pause_loop_time = 5	        # Pause Time (sec)
+
 # Configure Device
-sdr.sample_rate = 2.4e6         # 2.4e6 
+sdr.sample_rate = 2.4e6         # 2.4e6
 sdr.center_freq = 1420.4e6
-sdr.gain = 'auto' # 'auto' 
+sdr.gain = 'auto' # 'auto'
 
 print("SDR Gain = " + str(sdr.gain))
 
 # Prepare a Time Date String for Directory
 now = datetime.now()
 date_time_dir = now.strftime("%Y%m%d__%H%M")
-        
+
 # Determine the OS
 if platform == "linux" or platform == "linux2":
     # linux
@@ -80,17 +102,17 @@ if not os.path.exists(file_path_dir_dat):
 file_path_dir_raw = file_path_dir + "raw/"
 if not os.path.exists(file_path_dir_raw):
     os.mkdir(file_path_dir_raw)
-    
+
 # Create a Subdirectory for the Subtracted Figures
 file_path_dir_sub = file_path_dir + "sub/"
 if not os.path.exists(file_path_dir_sub):
     os.mkdir(file_path_dir_sub) 
-    
+
 # Create a Subdirectory for the animation files
 file_path_dir_gif = file_path_dir + "gif/"
 if not os.path.exists(file_path_dir_gif):
-    os.mkdir(file_path_dir_gif)        
-    
+    os.mkdir(file_path_dir_gif)
+
 # Print the Start Time
 print("Start Time : ", time.ctime())
 
@@ -110,7 +132,7 @@ for i in range(num_loops):
     psd_array_avg = np.zeros(psd_nfft)
 
     for j in range(num_group_loop):
-      
+
         # Update the time stamp
         now = datetime.now()
         date_time_cur = now.strftime("%Y%m%d__%H%M%S")
@@ -120,26 +142,26 @@ for i in range(num_loops):
 
         # Close Plot for PSD
         plt.close()
-    
+
         # Generate the PSD of the Data Collected
         psd_samp, freq_samp = plt.psd(samples, NFFT=psd_nfft, Fs=sdr.sample_rate / 1e6, Fc=sdr.center_freq / 1e6)
-        
-	    # Add to the loop PSD array
+
+	# Add to the loop PSD array
         psd_array = psd_array + psd_samp
         freq_array = freq_array + freq_samp
-        
-		# Calculate the average of the averaged PSD Array
+
+	# Calculate the average of the averaged PSD Array
         psd_samp_mean = np.average(psd_samp)
-   
+
         # Print Status
         print(date_time_cur + " Group " + str(i+1) + "/" + str(num_loops) + 
             ", File " + str(j+1) + "/" + str(num_group_loop) + 
             ", PSDAvg=" + f"{psd_samp_mean:.2e}" +
             ", SDRGain=" + str(sdr.gain))
-               
+
         # Close Plot for PSD
         plt.close()
-       
+
         # Update Counter
         count = count + 1
 
@@ -166,7 +188,7 @@ for i in range(num_loops):
     file_path_raw = file_path_dir_raw + loop + "__avg_raw__" + date_time + gps + "_NS" + f"{incline_ns:03d}" + "_EW" + f"{incline_ew:03d}"
     file_path_sub = file_path_dir_sub + loop + "__avg_sub__" + date_time + gps + "_NS" + f"{incline_ns:03d}" + "_EW" + f"{incline_ew:03d}"
     file_path_gif = file_path_dir_gif + loop + "__avg_gif__" + date_time + gps + "_NS" + f"{incline_ns:03d}" + "_EW" + f"{incline_ew:03d}"
-    
+
     # Generate an Average PSD
     print('Generating an Averaged Signal Result')
     psd_array_avg = psd_array / (count - 1)
@@ -179,7 +201,7 @@ for i in range(num_loops):
     if i+1 == 1 and sub_flag == 1:
 	    print("Count = " + str(count-1) + " Collected Reference Sample")
 	    psd_samp_base = psd_array_avg
-	    
+
     # Save the File
     print("Saving Data to " + file_path_dir_dat)
     np.save(file_path_dat, [psd_array_avg,freq_array_avg],psd_array_avg_mean)
@@ -204,25 +226,25 @@ for i in range(num_loops):
         if data_flag == 1:
             plt.ylim(low_limit, 4 * -low_limit)
             plt.xlim(x_low, x_high)
-            
+
         # Save the Plot
         print("Saving Raw Figure to " + file_path_dir_raw)
         plt.savefig(file_path_raw)
 
         # Show the Plot
-        plt.show()    
-        
+        plt.show()
+
         # Pause
         time.sleep(1)
-        
+
         # Close the Average Plot
         plt.close()
 
-		# Plot the PSD of the Averaged Data with the Baseline Subtracted
+        # Plot the PSD of the Averaged Data with the Baseline Subtracted
         if sub_flag == 1:
             psd_array_avg_sub = psd_array_avg - psd_samp_base
-	        
-	        # Plot a figure subtracted off the baseline signal        
+
+	    # Plot a figure subtracted off the baseline signal
             plt.figure(2)
             plt.plot(freq_array_avg, psd_array_avg_sub)
             plt.xlabel('Frequency (MHz)')
@@ -233,22 +255,22 @@ for i in range(num_loops):
             if data_flag == 1:
                 plt.ylim(low_limit, -low_limit)
                 plt.xlim(x_low, x_high)
-        
+
         # Save the Plot
         print("Saving Subtracted Figure to " + file_path_dir_sub)
         plt.savefig(file_path_sub)
 
         # Show the Plot
-        plt.show()              
-            
+        plt.show()
+
         # Pause
         time.sleep(1)
-        
+
         # Close the Average Plot
-        plt.close()            
+        plt.close()
 
     print('------------------------------------')
-             
+
     # Pause Before the Next Loop
     time.sleep(pause_loop_time)
 
@@ -256,7 +278,7 @@ for i in range(num_loops):
     del file_path_dat
     del file_path_raw
     del file_path_sub
-    
+
     # Close the Plot
     plt.close()
 
@@ -265,6 +287,22 @@ sdr.close()
 
 # Close all Plots
 plt.close()
+
+# Generate gifs from the saved images
+print('Converting PNG files in : ' + file_path_dir_sub)
+
+# sub - Create an array of the images and convert to GIF
+png_sub_files = list_png_files(file_path_dir_sub)
+in_files = png_sub_files
+out_files = (file_path_dir_gif + '/sub.gif')
+generate_gif(in_files, out_files)
+
+# raw - Create an array of the images and convert to GIF
+png_raw_files = list_png_files(file_path_dir_raw)
+in_files = png_raw_files
+out_files = (file_path_dir_gif + '/raw.gif')
+generate_gif(in_files, out_files)
+
 
 # End Program
 # Print the End Time
